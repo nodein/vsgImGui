@@ -178,7 +178,7 @@ void RenderImGui::_init(
     init_info.QueueFamily = _queueFamily;
     init_info.Queue = *(_queue); // ImGui doesn't use the queue so we shouldn't need to assign it, but it has an IM_ASSERT requiring it during debug build.
     init_info.PipelineCache = VK_NULL_HANDLE;
-    init_info.MSAASamples = samples;
+    init_info.PipelineInfoMain.MSAASamples = samples;
 
     // Create Descriptor Pool
     vsg::DescriptorPoolSizes pool_sizes = {
@@ -198,7 +198,7 @@ void RenderImGui::_init(
     _descriptorPool = vsg::DescriptorPool::create(_device, maxSets, pool_sizes);
 
     init_info.DescriptorPool = *_descriptorPool;
-    init_info.RenderPass = *renderPass;
+    init_info.PipelineInfoMain.RenderPass = *renderPass;
     init_info.Allocator = nullptr;
     init_info.MinImageCount = std::max(minImageCount, 2u); // ImGui's Vulkan backend has an assert that requires MinImageCount to be 2 or more.
     init_info.ImageCount = imageCount;
@@ -219,7 +219,7 @@ void RenderImGui::_init(
 
 void RenderImGui::_uploadFonts()
 {
-    ImGui_ImplVulkan_CreateFontsTexture();
+    // Font texture upload is now handled automatically by ImGui_ImplVulkan_Init()
 }
 
 void RenderImGui::accept(vsg::RecordTraversal& rt) const
